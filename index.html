@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Only For Setayesh ❤️</title>
+<style>
+body{
+    margin:0;
+    height:100vh;
+    overflow:hidden;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    background: radial-gradient(circle at center, #1a0000, #000);
+    font-family: 'Segoe UI', sans-serif;
+    color:white;
+    transition:1s;
+}
+
+.screen{text-align:center;}
+
+input{
+    padding:12px;
+    font-size:18px;
+    border-radius:10px;
+    border:none;
+    margin:10px;
+    text-align:center;
+}
+
+button{
+    padding:12px 25px;
+    font-size:16px;
+    border:none;
+    border-radius:10px;
+    background:#ff0033;
+    color:white;
+    cursor:pointer;
+}
+
+.hidden{display:none;}
+
+.heart{
+    position: relative;
+    width: 230px;
+    height: 210px;
+    background: #ff0033;
+    transform: rotate(-45deg);
+    animation: beat 1.2s infinite;
+    box-shadow: 0 0 60px #ff0033;
+    margin:auto;
+}
+
+.heart:before,
+.heart:after{
+    content:"";
+    position:absolute;
+    width:230px;
+    height:210px;
+    background:#ff0033;
+    border-radius:50%;
+}
+
+.heart:before{ top:-115px; left:0; }
+.heart:after{ left:115px; top:0; }
+
+@keyframes beat{
+    0%{ transform: rotate(-45deg) scale(1); }
+    50%{ transform: rotate(-45deg) scale(1.25); }
+    100%{ transform: rotate(-45deg) scale(1); }
+}
+
+.nameText{
+    position:absolute;
+    width:230px;
+    top:85px;
+    left:0;
+    transform: rotate(45deg);
+    font-size:30px;
+    font-weight:bold;
+    text-shadow:0 0 20px white;
+}
+
+.message{
+    margin-top:30px;
+    font-size:22px;
+    min-height:40px;
+}
+</style>
+</head>
+<body>
+
+<div class="screen" id="lockScreen">
+    <h2>Enter Our Special Date ❤️</h2>
+    <input type="password" id="dateInput" placeholder="YYYYMMDD">
+    <br>
+    <button onclick="checkDate()">Unlock</button>
+</div>
+
+<div class="screen hidden" id="nameScreen">
+    <h2>Tell me your name...</h2>
+    <input type="text" id="nameInput" placeholder="Your Name">
+    <br>
+    <button onclick="startLove()">Continue</button>
+</div>
+
+<div class="screen hidden" id="loveScreen">
+    <div class="heart" id="mainHeart">
+        <div class="nameText" id="displayName"></div>
+    </div>
+    <div class="message" id="loveMessage"></div>
+</div>
+
+<audio id="heartbeat" loop>
+<source src="https://www.soundjay.com/human/heartbeat-01a.mp3" type="audio/mpeg">
+</audio>
+
+<script>
+const correctDate="14041118";
+
+function checkDate(){
+    const input=document.getElementById("dateInput").value;
+    if(input===correctDate){
+        document.getElementById("heartbeat").play();
+        document.getElementById("lockScreen").classList.add("hidden");
+        document.getElementById("nameScreen").classList.remove("hidden");
+    }else{
+        document.body.style.background="black";
+        alert("Only you know this date...");
+    }
+}
+
+function startLove(){
+    const name=document.getElementById("nameInput").value.trim();
+    if(name==="") return;
+
+    document.getElementById("nameScreen").classList.add("hidden");
+    document.getElementById("loveScreen").classList.remove("hidden");
+
+    document.getElementById("displayName").innerHTML=name;
+
+    if(name.toLowerCase()==="setayesh"){
+        document.getElementById("mainHeart").style.animation="beat 0.7s infinite";
+    }
+
+    typeMessage("From the first moment I saw you, my world changed forever...");
+}
+
+function typeMessage(text){
+    let i=0;
+    const speed=50;
+    const msg=document.getElementById("loveMessage");
+    msg.innerHTML="";
+    function typing(){
+        if(i<text.length){
+            msg.innerHTML+=text.charAt(i);
+            i++;
+            setTimeout(typing,speed);
+        }else{
+            setTimeout(()=>{
+                msg.innerHTML="<br><br>I L❤️VE YOU, Setayesh ❤️";
+            },1000);
+        }
+    }
+    typing();
+}
+</script>
+
+</body>
+  </html>
