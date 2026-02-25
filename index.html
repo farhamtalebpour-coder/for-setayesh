@@ -19,6 +19,7 @@ body{
     text-align:center;
 }
 
+/* Lock Screen */
 #lockScreen{
     display:flex;
     flex-direction:column;
@@ -43,11 +44,14 @@ button{
 }
 .hidden{display:none;}
 
+/* Main Screen */
 #mainScreen{
     display:none;
     flex-direction:column;
     align-items:center;
 }
+
+/* اموجی تپنده */
 .emoji{
     font-size:80px;
     cursor:pointer;
@@ -58,12 +62,15 @@ button{
     0%,100%{ transform: scale(1); }
     50%{ transform: scale(1.3); }
 }
+
+/* پیام */
 #message{
     font-size:20px;
     line-height:1.5;
 }
 @media(max-width:500px){ #message{ font-size:16px; } }
 
+/* Modal */
 #modal{
     display:none;
     position:fixed;
@@ -135,32 +142,38 @@ function checkDate(){
 function openModal(){ document.getElementById("modal").style.display="flex"; }
 function closeModal(){ document.getElementById("modal").style.display="none"; }
 
-// ساعت شمار دقیق میلادی
+// ساعت شمار دقیق و تضمینی
 function startTimer(){
     const timerDiv = document.getElementById("timer");
-    const startDate = new Date(2026,1,7,2,47,0); // 7 فوریه 2026 ساعت 2:47
+    const startDate = new Date(2026,1,7,2,47,0); // 7 فوریه 2026 ساعت 02:47
 
     function updateTimer(){
         const now = new Date();
         let diff = now - startDate;
-        let minutes = Math.floor(diff / (1000*60));
-        let hours = Math.floor(minutes / 60);
-        let days = Math.floor(hours /24);
-        let years = Math.floor(days / 365);
+        if(diff<0) diff=0;
+
+        let seconds = Math.floor(diff/1000);
+        let minutes = Math.floor(seconds/60);
+        let hours = Math.floor(minutes/60);
+        let days = Math.floor(hours/24);
+        let years = Math.floor(days/365);
 
         let displayYears = years;
         let displayDays = days - years*365;
         let displayHours = hours - days*24;
         let displayMinutes = minutes - hours*60;
-        let displaySeconds = Math.floor((diff/1000)%60);
+        let displaySeconds = seconds - minutes*60;
 
-        let hearts = '❤️'.repeat(displayYears + displayDays + displayHours + displayMinutes);
+        // ❤️ محدود تا 50 تا در یک خط
+        let totalHearts = displayYears + displayDays + displayHours + displayMinutes;
+        let hearts = '❤️'.repeat(Math.min(totalHearts,50));
 
         timerDiv.innerHTML = `${displayYears} سال، ${displayDays} روز، ${displayHours} ساعت، ${displayMinutes} دقیقه، ${displaySeconds} ثانیه گذشته<br>${hearts}`;
     }
+
     updateTimer();
     setInterval(updateTimer,1000);
 }
 </script>
 </body>
-    </html>
+</html>
