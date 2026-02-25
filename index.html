@@ -4,173 +4,280 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>For Setayesh 💏</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400;700&display=swap" rel="stylesheet">
+
 <style>
-body{
-    margin:0;
-    padding:0;
-    font-family:'Segoe UI', Tahoma, sans-serif;
-    background:#fff;
-    color:#333;
-    display:flex;
-    flex-direction:column;
-    justify-content:center;
-    align-items:center;
-    height:100vh;
-    text-align:center;
-    overflow:hidden;
+body {
+    margin: 0;
+    padding: 0;
+    font-family: 'Dancing Script', cursive;
+    background: linear-gradient(135deg, #ffe4e9 0%, #ffd1dc 50%, #ff9db3 100%);
+    color: #4a2c3f;
+    min-height: 100vh;
+    text-align: center;
+    position: relative;
 }
 
-/* Lock Screen */
-#lockScreen{
-    display:flex;
-    flex-direction:column;
-    align-items:center;
+.hearts-bg {
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: -1;
 }
-input{
-    padding:12px 20px;
-    font-size:18px;
-    border-radius:12px;
-    border:1px solid #ddd;
-    margin:15px 0;
-    width:180px;
-    text-align:center;
+.heart-particle {
+    position: absolute;
+    font-size: 20px;
+    color: #ff85a2;
+    opacity: 0.75;
+    animation: floatUp linear infinite;
+    transform: translateX(-50%);
+    pointer-events: none;
 }
-button{
-    padding:12px 35px;
-    font-size:17px;
-    border:none;
-    border-radius:12px;
-    background:#e91e63;
-    color:white;
-    cursor:pointer;
-    transition:0.3s;
-}
-button:hover{ background:#c2185b; }
-
-/* Main Screen */
-#mainScreen{
-    display:none;
-    flex-direction:column;
-    align-items:center;
-    position:relative;
+@keyframes floatUp {
+    0%   { transform: translateY(110vh) rotate(0deg); opacity: 0.85; }
+    100% { transform: translateY(-30vh) rotate(720deg); opacity: 0; }
 }
 
-/* استیکر بوسه - بدون انیمیشن تپنده */
-.kiss{
-    width:240px;
-    height:240px;
-    object-fit:contain;
-    cursor:pointer;
-    margin:25px 0;
+.vibrate-bg .heart-particle {
+    animation: floatUp linear infinite, shake 0.7s infinite;
+}
+@keyframes shake {
+    0%, 100% { transform: translateY(0) rotate(0deg); }
+    25%  { transform: translateY(-10px) rotate(6deg); }
+    75%  { transform: translateY(10px) rotate(-6deg); }
 }
 
-/* دکمه صدا */
-#soundToggle{
-    position:absolute;
-    top:20px;
-    right:20px;
-    background:#e91e63;
-    color:white;
-    border:none;
-    border-radius:50%;
-    width:50px;
-    height:50px;
-    font-size:20px;
-    cursor:pointer;
-    box-shadow:0 4px 10px rgba(0,0,0,0.2);
+#soundToggle {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    background: #ff6f91;
+    color: white;
+    border: none;
+    border-radius: 50%;
+    width: 55px;
+    height: 55px;
+    font-size: 24px;
+    cursor: pointer;
+    box-shadow: 0 4px 12px rgba(255, 105, 180, 0.4);
+    z-index: 50;
 }
 
-/* پیام */
-#message{
-    font-size:20px;
-    line-height:1.6;
-    max-width:85%;
-    color:#444;
-    padding:0 15px;
+.heart-container {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 260px;
+    height: 260px;
+    cursor: pointer;
+    user-select: none;
+    -webkit-user-select: none;
+    z-index: 20;
+}
+.heart {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 130px;
+    height: 130px;
+    background: #ff6f91;
+    transform: translate(-50%, -50%) rotate(-45deg);
+    animation: beat 1.5s infinite ease-in-out;
+}
+.heart::before,
+.heart::after {
+    content: '';
+    position: absolute;
+    width: 130px;
+    height: 130px;
+    background: #ff6f91;
+    border-radius: 50%;
+}
+.heart::before { top: -65px; left: 0; }
+.heart::after { left: 65px; top: 0; }
+@keyframes beat {
+    0%, 100% { transform: translate(-50%, -50%) rotate(-45deg) scale(1); }
+    50%      { transform: translate(-50%, -50%) rotate(-45deg) scale(1.22); }
 }
 
-/* Modal */
-#modal{
-    display:none;
-    position:fixed;
-    inset:0;
-    background:rgba(0,0,0,0.7);
-    justify-content:center;
-    align-items:center;
-    z-index:1000;
+#main-message {
+    position: fixed;
+    top: 20%;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 26px;
+    line-height: 1.55;
+    max-width: 88%;
+    color: #5c2d45;
+    padding: 0 20px;
+    opacity: 0;
+    transition: opacity 2.2s ease-in-out;
+    z-index: 10;
 }
-#modalContent{
-    background:#ffebee;
-    padding:35px 30px;
-    border-radius:20px;
-    max-width:90%;
-    width:420px;
-    text-align:center;
-    box-shadow:0 15px 40px rgba(0,0,0,0.25);
-    border:2px solid #ffc1e3;
-}
-#closeBtn{
-    margin-top:20px;
-    padding:12px 30px;
-    border:none;
-    border-radius:12px;
-    background:#e91e63;
-    color:white;
-    font-size:16px;
-    cursor:pointer;
-}
-#closeBtn:hover{ background:#c2185b; }
 
-/* جدول تایمر */
+#forever-message {
+    position: fixed;
+    bottom: 40px;
+    left: 50%;
+    transform: translateX(-50%);
+    opacity: 0;
+    transition: opacity 3s ease-in-out;
+    text-align: center;
+    width: 90%;
+}
+#forever-poem {
+    font-size: 28px;
+    color: #c71585;
+    line-height: 1.4;
+}
+#forever-credit {
+    font-size: 18px;
+    color: #7a3d5a;
+    margin-top: 12px;
+    font-style: italic;
+}
+
+#lockScreen {
+    position: fixed;
+    inset: 0;
+    z-index: 100;
+    background: inherit;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+input {
+    padding: 14px 24px;
+    font-size: 19px;
+    border-radius: 14px;
+    border: 2px solid #ffb6c1;
+    margin: 18px 0;
+    width: 200px;
+    text-align: center;
+    font-family: system-ui;
+}
+button {
+    padding: 14px 40px;
+    font-size: 18px;
+    border: none;
+    border-radius: 14px;
+    background: #ff6f91;
+    color: white;
+    cursor: pointer;
+    box-shadow: 0 4px 12px rgba(255, 105, 180, 0.35);
+}
+
+#lockHeartContainer {
+    position: relative;
+    width: 180px;
+    height: 180px;
+    margin: 40px 0;
+    cursor: pointer;
+}
+.lock-heart {
+    position: absolute; top: 50%; left: 50%;
+    width: 90px; height: 90px;
+    background: #ff6f91;
+    transform: translate(-50%, -50%) rotate(-45deg);
+    animation: beat 1.8s infinite ease-in-out;
+}
+.lock-heart::before,
+.lock-heart::after {
+    content: ''; position: absolute; width: 90px; height: 90px;
+    background: #ff6f91; border-radius: 50%;
+}
+.lock-heart::before { top: -45px; left: 0; }
+.lock-heart::after { left: 45px; top: 0; }
+
+#modal, #lockWarningModal {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.65);
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+#modalContent, #lockWarningContent {
+    background: #fff0f5;
+    padding: 35px 28px;
+    border-radius: 24px;
+    max-width: 92%;
+    width: 440px;
+    text-align: center;
+    box-shadow: 0 15px 45px rgba(255, 105, 180, 0.3);
+    border: 2px solid #ffb6c1;
+}
+
 #timerTable {
-    width:100%;
-    border-collapse:collapse;
-    margin:20px 0;
-    font-size:19px;
+    width: 100%;
+    border-collapse: collapse;
+    margin: 25px 0;
+    font-size: 20px;
 }
 #timerTable td {
-    padding:10px 15px;
-    border-bottom:1px solid #ffc1e3;
+    padding: 10px 16px;
+    border-bottom: 1px solid #ffb6c1;
 }
 #timerTable td:first-child {
-    font-weight:bold;
-    color:#c2185b;
-    text-align:right;
-    width:40%;
+    font-weight: bold;
+    color: #c71585;
+    text-align: right;
+    width: 42%;
 }
 #hearts {
-    font-size:40px;           /* کمی بزرگ‌تر برای تأکید روی دو قلب */
-    margin-top:25px;
-    letter-spacing:12px;
+    font-size: 52px;
+    margin-top: 30px;
+    letter-spacing: 18px;
 }
 
-@media(max-width:480px){
-    #modalContent{ padding:25px 20px; width:90%; }
-    .kiss{ width:200px; height:200px; }
-    #soundToggle{ top:10px; right:10px; width:40px; height:40px; font-size:18px; }
+@media (max-width: 520px) {
+    .heart-container { width: 220px; height: 220px; }
+    .heart, .heart::before, .heart::after { width: 110px; height: 110px; }
+    .heart::before { top: -55px; }
+    .heart::after { left: 55px; }
+    #soundToggle { top: 15px; right: 15px; width: 48px; height: 48px; font-size: 22px; }
+    #main-message { font-size: 23px; top: 15%; }
+    #forever-poem { font-size: 24px; }
+    #forever-credit { font-size: 16px; }
 }
 </style>
 </head>
 <body>
 
+<div class="hearts-bg" id="heartsBg"></div>
+
 <div id="lockScreen">
-    <h2>تاریخ خاص ما رو وارد کن ❤️</h2>
+    <h2>یعنی رمز چی میتونه باشه؟🤔 💗</h2>
+    <div id="lockHeartContainer" onclick="showLockWarning()">
+        <div class="lock-heart"></div>
+    </div>
     <input type="password" id="dateInput" placeholder="YYYYMMDD">
     <button onclick="checkDate()">باز کردن</button>
 </div>
 
-<div id="mainScreen">
+<div id="mainScreen" style="display:none;">
     <button id="soundToggle" onclick="toggleSound()">🔊</button>
-    <img src="https://media1.tenor.com/m/5qWv5wM0Q0IAAAAC/cute-couple-kiss.gif" 
-         class="kiss" 
-         onclick="openModal()" 
-         alt="بوسه عاشقانه">
-    <div id="message">مثل خون در رگ‌های من... ممنون که اومدی و جانی دوباره بهم دادی تا بجنگم با این دنیای بد و نامرد</div>
+    
+    <div class="heart-container" id="heartContainer">
+        <div class="heart"></div>
+    </div>
+    
+    <div id="main-message"></div>
+    
+    <div id="forever-message">
+        <div id="forever-poem">چون تو دارم همه دارم دگرم هیچ نباید 💕</div>
+        <div id="forever-credit">سعدی • از ۱۴۰۴/۱۱/۱۸ برای همیشه</div>
+    </div>
 </div>
 
 <div id="modal">
     <div id="modalContent">
-        <h3>❤️ ساعت‌شمار عشق ما ❤️</h3>
+        <h3>💗 ساعت مبتلایی 💗</h3>
         <table id="timerTable">
             <tr><td>سال</td><td id="years">0</td></tr>
             <tr><td>ماه</td><td id="months">0</td></tr>
@@ -184,38 +291,225 @@ button:hover{ background:#c2185b; }
     </div>
 </div>
 
+<div id="lockWarningModal">
+    <div id="lockWarningContent">
+        <h3>شیطون! اول رمز رو بزن 😼💕</h3>
+        <button onclick="closeLockWarning()">باشههه</button>
+    </div>
+</div>
+
 <audio id="bgMusic" loop>
-    <source src="https://cdn.pixabay.com/audio/2023/08/07/audio_3b8d4f8f8f.mp3" type="audio/mpeg">
-    مرورگرت audio رو ساپورت نمی‌کنه.
+    <source src="https://cdn.pixabay.com/download/audio/2023/08/07/audio_3b8d4f8f8f.mp3?filename=romantic-piano-208065.mp3" type="audio/mpeg">
 </audio>
 
 <script>
 // رمز
 const correctDate = "14041118";
 
-function checkDate(){
-    const input = document.getElementById("dateInput").value.trim();
-    if(input === correctDate){
-        document.getElementById("lockScreen").style.display = "none";
-        document.getElementById("mainScreen").style.display = "flex";
-        startTimer();
-        const music = document.getElementById("bgMusic");
-        music.volume = 0.3;
-        music.play().catch(() => {});
+const mainMessageText = "تو مثل خون تو رگ‌هامی... ممنون که جون تازه‌ای بهم دادی 💗";
+let charIndex = 0;
+
+// Web Audio بوق مورس
+const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+
+function playMorseBeep(durationMs, frequency = 900) {
+    const oscillator = audioCtx.createOscillator();
+    const gainNode = audioCtx.createGain();
+    oscillator.connect(gainNode);
+    gainNode.connect(audioCtx.destination);
+    oscillator.type = 'sine';
+    oscillator.frequency.setValueAtTime(frequency, audioCtx.currentTime);
+    gainNode.gain.setValueAtTime(0.4, audioCtx.currentTime);
+    gainNode.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + durationMs/1000);
+    oscillator.start();
+    oscillator.stop(audioCtx.currentTime + durationMs/1000 + 0.05);
+}
+
+// مورس
+let morseInput = '';
+let lastInputTime = 0;
+let vibrationTimer = null;
+let pendingDotTimer = null;
+
+const DOUBLE_CLICK_GAP = 500;
+const DOT_MAX = 350;
+const DASH_MIN = 400;
+const MESSAGE_AFTER_DOTS = 3000;
+const VIBRATION_RESET_AFTER = 10000;
+
+const heartContainer = document.getElementById('heartContainer');
+const heartsBg = document.getElementById('heartsBg');
+
+function startVibration() {
+    heartsBg.classList.add('vibrate-bg');
+    clearTimeout(vibrationTimer);
+}
+
+function stopVibration() {
+    heartsBg.classList.remove('vibrate-bg');
+    clearTimeout(vibrationTimer);
+    clearTimeout(pendingDotTimer);
+    pendingDotTimer = null;
+}
+
+function handleInput(isDash = false) {
+    const now = Date.now();
+    if (isDash) {
+        morseInput += '-';
+        playMorseBeep(240);
     } else {
-        alert("فقط تو این تاریخ رو می‌دونی... 😏");
-        document.body.style.background = "#000";
-        document.body.style.color = "#fff";
+        morseInput += '.';
+        playMorseBeep(80);
+    }
+    lastInputTime = now;
+    checkMorsePatterns();
+}
+
+function checkMorsePatterns() {
+    if (morseInput === '..' && !pendingDotTimer) {
+        startVibration();
+        pendingDotTimer = setTimeout(() => {
+            if (morseInput === '..') {
+                showSecretMessage();
+                stopVibration();
+            }
+            pendingDotTimer = null;
+        }, MESSAGE_AFTER_DOTS);
+    }
+
+    if (morseInput === '..---') {
+        setTimeout(() => {
+            window.location.href = 'page2.html';
+        }, 400);
+        stopVibration();
+        morseInput = '';
+        clearTimeout(pendingDotTimer);
+        pendingDotTimer = null;
+    }
+
+    if (morseInput.length > 5 || (Date.now() - lastInputTime > VIBRATION_RESET_AFTER && morseInput !== '..---')) {
+        morseInput = '';
+        stopVibration();
+        clearTimeout(pendingDotTimer);
+        pendingDotTimer = null;
     }
 }
 
-function openModal(){ document.getElementById("modal").style.display = "flex"; }
-function closeModal(){ document.getElementById("modal").style.display = "none"; }
+function showSecretMessage() {
+    const msg = document.createElement('div');
+    msg.textContent = 'پیشی کوچولو من بمون 🐱💗';
+    msg.style.cssText = `
+        position: fixed; inset: 0; margin: auto;
+        width: fit-content; height: fit-content;
+        padding: 30px 50px; border-radius: 30px;
+        background: rgba(255,240,245,0.92);
+        color: #c71585; font-size: 36px;
+        box-shadow: 0 10px 40px rgba(199,21,133,0.5);
+        z-index: 9999; text-align: center;
+        opacity: 0; transform: scale(0.8);
+        transition: all 1.2s ease;
+        font-family: 'Dancing Script', cursive;
+    `;
+    document.body.appendChild(msg);
 
-function toggleSound(){
+    setTimeout(() => {
+        msg.style.opacity = '1';
+        msg.style.transform = 'scale(1)';
+    }, 100);
+
+    setTimeout(() => {
+        msg.style.opacity = '0';
+        msg.style.transform = 'scale(0.9)';
+        setTimeout(() => msg.remove(), 1500);
+    }, 5000);
+}
+
+// رویدادهای قلب
+heartContainer.addEventListener('click', (e) => {
+    if (morseInput === '') {
+        openModal();
+    }
+    e.stopPropagation();
+}, { passive: false });
+
+let pressStart = 0;
+
+heartContainer.addEventListener('mousedown', () => { pressStart = Date.now(); });
+heartContainer.addEventListener('mouseup', () => {
+    const duration = Date.now() - pressStart;
+    if (duration >= DASH_MIN) {
+        handleInput(true);
+    }
+    pressStart = 0;
+});
+
+heartContainer.addEventListener('touchstart', (e) => { 
+    pressStart = Date.now(); 
+});
+heartContainer.addEventListener('touchend', (e) => {
+    const duration = Date.now() - pressStart;
+    if (duration >= DASH_MIN) {
+        handleInput(true);
+    } else if (duration < DOT_MAX) {
+        handleInput(false);
+    }
+    pressStart = 0;
+});
+
+// تایپ متن
+function typeWriter() {
+    if (charIndex < mainMessageText.length) {
+        document.getElementById("main-message").innerHTML += mainMessageText.charAt(charIndex);
+        charIndex++;
+        setTimeout(typeWriter, 65);
+    } else {
+        setTimeout(() => {
+            document.getElementById("main-message").style.opacity = 0;
+            setTimeout(() => {
+                document.getElementById("forever-message").style.opacity = 1;
+            }, 2500);
+        }, 18000);
+    }
+}
+
+function checkDate() {
+    const input = document.getElementById("dateInput").value.trim();
+    if (input === correctDate) {
+        document.getElementById("lockScreen").style.display = "none";
+        document.getElementById("mainScreen").style.display = "block";
+        startTimer();
+        
+        document.getElementById("main-message").style.opacity = 1;
+        setTimeout(typeWriter, 800);
+        
+        const music = document.getElementById("bgMusic");
+        music.volume = 0.28;
+        music.play().catch(()=>{});
+    } else {
+        alert("فقط تو این تاریخ رو می‌دونی... 💗");
+    }
+}
+
+function showLockWarning() {
+    document.getElementById("lockWarningModal").style.display = "flex";
+}
+
+function closeLockWarning() {
+    document.getElementById("lockWarningModal").style.display = "none";
+}
+
+function openModal() {
+    document.getElementById("modal").style.display = "flex";
+}
+
+function closeModal() {
+    document.getElementById("modal").style.display = "none";
+}
+
+function toggleSound() {
     const music = document.getElementById("bgMusic");
     const btn = document.getElementById("soundToggle");
-    if(music.muted || music.paused){
+    if (music.paused || music.muted) {
         music.muted = false;
         music.play();
         btn.textContent = "🔊";
@@ -225,11 +519,23 @@ function toggleSound(){
     }
 }
 
-// تایمر
-function startTimer(){
+function createHeart() {
+    const heart = document.createElement("div");
+    heart.className = "heart-particle";
+    heart.innerHTML = Math.random() > 0.6 ? "💗" : "❤️";
+    heart.style.left = Math.random() * 100 + "vw";
+    heart.style.animationDuration = (Math.random() * 9 + 11) + "s";
+    heart.style.fontSize = (Math.random() * 16 + 16) + "px";
+    document.getElementById("heartsBg").appendChild(heart);
+    setTimeout(() => heart.remove(), 22000);
+}
+
+setInterval(createHeart, 450);
+
+function startTimer() {
     const start = new Date(2026, 1, 7, 2, 47, 0);
 
-    function update(){
+    function update() {
         const now = new Date();
         let y = now.getFullYear() - start.getFullYear();
         let m = now.getMonth() - start.getMonth();
@@ -243,8 +549,8 @@ function startTimer(){
         if (h < 0) { d--; h += 24; }
         if (d < 0) {
             m--;
-            const prevMonth = new Date(now.getFullYear(), now.getMonth(), 0);
-            d += prevMonth.getDate();
+            const prev = new Date(now.getFullYear(), now.getMonth(), 0);
+            d += prev.getDate();
         }
         if (m < 0) { y--; m += 12; }
 
@@ -255,9 +561,8 @@ function startTimer(){
         document.getElementById("minutes").textContent = min;
         document.getElementById("seconds").textContent = s;
 
-        // فقط حداکثر ۲ قلب
-        const heartsCount = Math.min(2, y + m + d + Math.floor(h/24) + Math.floor(min/1440));
-        document.getElementById("hearts").textContent = '❤️'.repeat(heartsCount);
+        const heartsCount = Math.min(2, y + m + d);
+        document.getElementById("hearts").textContent = '💗'.repeat(heartsCount);
     }
 
     update();
@@ -265,4 +570,5 @@ function startTimer(){
 }
 </script>
 </body>
+    </html>
                                                      </html>
