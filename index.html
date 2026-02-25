@@ -1,30 +1,30 @@
-    <!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="fa">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>For Setayesh ❤️</title>
+<title>For Setayesh 💏</title>
 <style>
 body{
     margin:0;
     padding:0;
-    font-family: 'Segoe UI', sans-serif;
+    font-family:'Segoe UI', sans-serif;
     background:white;
     color:black;
     display:flex;
+    flex-direction:column;
     justify-content:center;
     align-items:center;
     height:100vh;
     text-align:center;
-    transition:1s;
-}
-
-.screen{
-    width:90%;
-    max-width:500px;
 }
 
 /* Lock Screen */
+#lockScreen{
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+}
 input{
     padding:12px;
     font-size:18px;
@@ -33,7 +33,6 @@ input{
     margin:10px;
     text-align:center;
 }
-
 button{
     padding:12px 25px;
     font-size:16px;
@@ -44,55 +43,143 @@ button{
     cursor:pointer;
 }
 
+/* Hidden class */
 .hidden{display:none;}
 
-#message{
-    font-size:20px;
-    margin-top:20px;
-    line-height:1.5;
-}
-@media (max-width:500px){
-    #message{
-        font-size:16px;
-    }
+/* Main Screen */
+#mainScreen{
+    display:none;
+    flex-direction:column;
+    align-items:center;
 }
 
+/* اموجی تپنده */
 .emoji{
-    font-size:60px;
-    display:block;
-    margin:20px auto;
+    font-size:80px;
+    cursor:pointer;
+    animation: beat 1s infinite;
+    margin:20px;
+}
+@keyframes beat{
+    0%,100%{ transform: scale(1); }
+    50%{ transform: scale(1.3); }
+}
+
+/* پیام */
+#message{
+    font-size:20px;
+    line-height:1.5;
+}
+@media(max-width:500px){
+    #message{ font-size:16px; }
+}
+
+/* Modal */
+#modal{
+    display:none;
+    position:fixed;
+    top:0; left:0;
+    width:100%;
+    height:100%;
+    background:rgba(0,0,0,0.8);
+    justify-content:center;
+    align-items:center;
+    z-index:1000;
+}
+#modalContent{
+    background:white;
+    padding:30px;
+    border-radius:15px;
+    max-width:90%;
+    text-align:center;
+}
+#closeBtn{
+    margin-top:15px;
+    padding:10px 20px;
+    border:none;
+    border-radius:10px;
+    background:#ff0033;
+    color:white;
+    cursor:pointer;
 }
 </style>
 </head>
 <body>
 
 <!-- Lock Screen -->
-<div class="screen" id="lockScreen">
+<div id="lockScreen">
     <h2>Enter Our Special Date ❤️</h2>
     <input type="password" id="dateInput" placeholder="YYYYMMDD">
     <br>
     <button onclick="checkDate()">Unlock</button>
 </div>
 
-<!-- Main Content -->
-<div class="screen hidden" id="mainScreen">
-    <span class="emoji">💏❤️‍🩹</span>
+<!-- Main Screen -->
+<div id="mainScreen">
+    <span class="emoji" onclick="openModal()">💏</span>
     <div id="message">مثل خون در رگ های من ممنون که آمدی و جانی دوباره برایم دادی تا بجنگم با این دنیای بد و نامرد</div>
 </div>
 
+<!-- Modal -->
+<div id="modal">
+    <div id="modalContent">
+        <h3>❤️ ساعت شمار عاشقانه ❤️</h3>
+        <div id="timer"></div>
+        <button id="closeBtn" onclick="closeModal()">بستن</button>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/jalaali-js@1.1.0/dist/jalaali.min.js"></script>
 <script>
+// --- رمز ورود ---
 const correctDate="14041118";
 function checkDate(){
     const input = document.getElementById("dateInput").value;
     if(input===correctDate){
-        document.getElementById("lockScreen").classList.add("hidden");
-        document.getElementById("mainScreen").classList.remove("hidden");
+        document.getElementById("lockScreen").style.display="none";
+        document.getElementById("mainScreen").style.display="flex";
+        startTimer();
     }else{
         document.body.style.background="black";
         document.body.style.color="white";
         alert("Only you know this date...");
     }
 }
+
+// --- Modal functions ---
+function openModal(){ document.getElementById("modal").style.display="flex"; }
+function closeModal(){ document.getElementById("modal").style.display="none"; }
+
+// --- ساعت شمار عاشقانه دقیق هجری شمسی ---
+function startTimer(){
+    const timerDiv = document.getElementById("timer");
+    // تاریخ شروع هجری شمسی: 18 بهمن 1404 ساعت 2:47 شب
+    const startShamsi = {jy:1404,jm:11,jd:18,h:2,m:47,s:0};
+    const startGreg = jalaali.toGregorian(startShamsi.jy,startShamsi.jm,startShamsi.jd);
+    const startDate = new Date(startGreg.gy,startGreg.gm-1,startGreg.gd,startShamsi.h,startShamsi.m,startShamsi.s);
+
+    function updateTimer(){
+        const now = new Date();
+        let diff = now - startDate;
+        let minutes = Math.floor(diff / (1000*60));
+        let hours = Math.floor(minutes / 60);
+        let days = Math.floor(hours /24);
+        let years = Math.floor(days / 365);
+
+        let displayYears = years;
+        let displayDays = days - years*365;
+        let displayHours = hours - days*24;
+        let displayMinutes = minutes - hours*60;
+        let displaySeconds = Math.floor((diff/1000)%60);
+
+        let hearts = '❤️'.repeat(displayYears + displayDays + displayHours + displayMinutes);
+
+        timerDiv.innerHTML = `${displayYears} سال، ${displayDays} روز، ${displayHours} ساعت، ${displayMinutes} دقیقه، ${displaySeconds} ثانیه گذشته<br>${hearts}`;
+    }
+
+    updateTimer();
+    setInterval(updateTimer,1000);
+}
 </script>
 </body>
-</html>
+                </html>
