@@ -1,32 +1,27 @@
-<!DOCTYPE html>
-<html lang="en">
+    <!DOCTYPE html>
+<html lang="fa">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>For Setayesh 🌙❤️</title>
+<title>For Setayesh ❤️</title>
 <style>
 body{
     margin:0;
-    height:100vh;
-    overflow:hidden;
+    padding:0;
     font-family: 'Segoe UI', sans-serif;
-    background:black;
+    background:white;
+    color:black;
     display:flex;
     justify-content:center;
     align-items:center;
-    color:white;
+    height:100vh;
+    text-align:center;
     transition:1s;
 }
 
 .screen{
-    position:absolute;
-    width:100%;
-    height:100%;
-    display:flex;
-    flex-direction:column;
-    justify-content:center;
-    align-items:center;
-    text-align:center;
+    width:90%;
+    max-width:500px;
 }
 
 /* Lock Screen */
@@ -34,7 +29,7 @@ input{
     padding:12px;
     font-size:18px;
     border-radius:10px;
-    border:none;
+    border:1px solid #ccc;
     margin:10px;
     text-align:center;
 }
@@ -51,87 +46,21 @@ button{
 
 .hidden{display:none;}
 
-/* Scene */
-#scene{
-    position:relative;
-    width:100%;
-    height:100%;
-    overflow:hidden;
-}
-
-.star{
-    position:absolute;
-    background:white;
-    border-radius:50%;
-    animation: twinkle 3s infinite;
-}
-@keyframes twinkle{
-    0%,100%{opacity:0.5;}
-    50%{opacity:1;}
-}
-
-/* Earth & Moon */
-#earth{
-    position:absolute;
-    bottom:0;
-    left:50%;
-    transform:translateX(-50%);
-    width:300px;
-    z-index:1;
-}
-#moon{
-    position:absolute;
-    width:80px;
-    bottom:200px;
-    left:50%;
-    transform-origin: -200px 0px;
-    animation: moonOrbit 20s linear infinite;
-    z-index:2;
-}
-@keyframes moonOrbit{
-    0%{ transform: rotate(0deg) translateX(-200px); }
-    100%{ transform: rotate(360deg) translateX(-200px); }
-}
-
-/* Body & Heart */
-#body{
-    position:absolute;
-    top:50%;
-    left:50%;
-    width:150px;
-    height:300px;
-    transform:translate(-50%,-50%);
-    background: radial-gradient(circle at center, #330000, #000);
-    border-radius: 75px 75px 20px 20px;
-    z-index:3;
-}
-#heart{
-    position:absolute;
-    top:40%;
-    left:50%;
-    width:40px;
-    height:40px;
-    transform:translate(-50%,-50%);
-    fill:red;
-    transform-origin:center;
-    animation: beat 0.7s infinite;
-}
-@keyframes beat{
-    0%,100%{ transform: translate(-50%,-50%) scale(1); }
-    50%{ transform: translate(-50%,-50%) scale(1.4); }
-}
-
-/* Message */
 #message{
-    position:absolute;
-    top:80%;
-    width:90%;
     font-size:20px;
-    opacity:0;
-    transition:opacity 4s;
+    margin-top:20px;
+    line-height:1.5;
 }
 @media (max-width:500px){
-    #message{ font-size:16px; }
+    #message{
+        font-size:16px;
+    }
+}
+
+.emoji{
+    font-size:60px;
+    display:block;
+    margin:20px auto;
 }
 </style>
 </head>
@@ -145,49 +74,22 @@ button{
     <button onclick="checkDate()">Unlock</button>
 </div>
 
-<!-- Scene -->
-<div class="screen hidden" id="sceneScreen">
-    <div id="scene">
-        <div id="stars"></div>
-        <img id="earth" src="https://upload.wikimedia.org/wikipedia/commons/9/97/The_Earth_seen_from_Apollo_17.jpg" alt="Earth">
-        <img id="moon" src="https://upload.wikimedia.org/wikipedia/commons/e/e1/FullMoon2010.jpg" alt="Moon">
-        <div id="body">
-            <svg id="heart" viewBox="0 0 32 29.6">
-                <path d="M23.6,0c-2.9,0-5.4,1.7-6.6,4.1C15.8,1.7,13.3,0,10.4,0C4.7,0,0,4.7,0,10.4c0,5.2,4.3,9.4,10.8,14.8
-                c2.4,2,4.9,4,6.4,5.3c1.5-1.3,4-3.3,6.4-5.3C27.7,19.8,32,15.6,32,10.4C32,4.7,27.3,0,23.6,0z"/>
-            </svg>
-        </div>
-        <div id="message">مثل خون در رگ های من ممنون که آمدی و جانی دوباره برایم دادی تا بجنگم با این دنیای بد و نامرد</div>
-    </div>
-    <audio id="bgMusic" autoplay loop>
-        <source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3" type="audio/mpeg">
-    </audio>
+<!-- Main Content -->
+<div class="screen hidden" id="mainScreen">
+    <span class="emoji">💏❤️‍🩹</span>
+    <div id="message">مثل خون در رگ های من ممنون که آمدی و جانی دوباره برایم دادی تا بجنگم با این دنیای بد و نامرد</div>
 </div>
 
 <script>
-// Stars
-const starsContainer = document.getElementById("stars");
-for(let i=0;i<50;i++){
-    const star = document.createElement('div');
-    star.className='star';
-    const size=Math.random()*3+1;
-    star.style.width=size+'px';
-    star.style.height=size+'px';
-    star.style.top=Math.random()*100+'%';
-    star.style.left=Math.random()*100+'%';
-    starsContainer.appendChild(star);
-}
-
-// Check password
 const correctDate="14041118";
 function checkDate(){
     const input = document.getElementById("dateInput").value;
     if(input===correctDate){
         document.getElementById("lockScreen").classList.add("hidden");
-        document.getElementById("sceneScreen").classList.remove("hidden");
-        setTimeout(()=>{ document.getElementById("message").style.opacity=1; }, 1000);
+        document.getElementById("mainScreen").classList.remove("hidden");
     }else{
         document.body.style.background="black";
+        document.body.style.color="white";
         alert("Only you know this date...");
     }
 }
