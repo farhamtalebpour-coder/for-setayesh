@@ -15,8 +15,43 @@ body{
     justify-content:center;
     align-items:center;
     color:white;
+    transition:1s;
 }
 
+.screen{
+    position:absolute;
+    width:100%;
+    height:100%;
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+    align-items:center;
+    text-align:center;
+}
+
+/* Lock Screen */
+input{
+    padding:12px;
+    font-size:18px;
+    border-radius:10px;
+    border:none;
+    margin:10px;
+    text-align:center;
+}
+
+button{
+    padding:12px 25px;
+    font-size:16px;
+    border:none;
+    border-radius:10px;
+    background:#ff0033;
+    color:white;
+    cursor:pointer;
+}
+
+.hidden{display:none;}
+
+/* Scene */
 #scene{
     position:relative;
     width:100%;
@@ -24,20 +59,18 @@ body{
     overflow:hidden;
 }
 
-/* ستاره‌ها */
 .star{
     position:absolute;
     background:white;
     border-radius:50%;
     animation: twinkle 3s infinite;
 }
-
 @keyframes twinkle{
     0%,100%{opacity:0.5;}
     50%{opacity:1;}
 }
 
-/* زمین و ماه */
+/* Earth & Moon */
 #earth{
     position:absolute;
     bottom:0;
@@ -46,7 +79,6 @@ body{
     width:300px;
     z-index:1;
 }
-
 #moon{
     position:absolute;
     width:80px;
@@ -56,13 +88,12 @@ body{
     animation: moonOrbit 20s linear infinite;
     z-index:2;
 }
-
 @keyframes moonOrbit{
     0%{ transform: rotate(0deg) translateX(-200px); }
     100%{ transform: rotate(360deg) translateX(-200px); }
 }
 
-/* بدن انسان */
+/* Body & Heart */
 #body{
     position:absolute;
     top:50%;
@@ -74,8 +105,6 @@ body{
     border-radius: 75px 75px 20px 20px;
     z-index:3;
 }
-
-/* قلب داخل بدن */
 #heart{
     position:absolute;
     top:40%;
@@ -87,49 +116,56 @@ body{
     transform-origin:center;
     animation: beat 0.7s infinite;
 }
-
 @keyframes beat{
     0%,100%{ transform: translate(-50%,-50%) scale(1); }
     50%{ transform: translate(-50%,-50%) scale(1.4); }
 }
 
-/* متن تایپی */
+/* Message */
 #message{
     position:absolute;
     top:80%;
-    width:80%;
-    text-align:center;
-    font-size:22px;
+    width:90%;
+    font-size:20px;
     opacity:0;
     transition:opacity 4s;
+}
+@media (max-width:500px){
+    #message{ font-size:16px; }
 }
 </style>
 </head>
 <body>
-<div id="scene">
-    <!-- ستاره‌ها -->
-    <div id="stars"></div>
 
-    <img id="earth" src="https://upload.wikimedia.org/wikipedia/commons/9/97/The_Earth_seen_from_Apollo_17.jpg" alt="Earth">
-    <img id="moon" src="https://upload.wikimedia.org/wikipedia/commons/e/e1/FullMoon2010.jpg" alt="Moon">
-
-    <div id="body">
-        <svg id="heart" viewBox="0 0 32 29.6">
-            <path d="M23.6,0c-2.9,0-5.4,1.7-6.6,4.1C15.8,1.7,13.3,0,10.4,0C4.7,0,0,4.7,0,10.4c0,5.2,4.3,9.4,10.8,14.8
-            c2.4,2,4.9,4,6.4,5.3c1.5-1.3,4-3.3,6.4-5.3C27.7,19.8,32,15.6,32,10.4C32,4.7,27.3,0,23.6,0z"/>
-        </svg>
-    </div>
-
-    <div id="message">مثل خون در رگ های من ممنون که آمدی و جانی دوباره برایم دادی تا بجنگم با این دنیای بد و نامرد</div>
+<!-- Lock Screen -->
+<div class="screen" id="lockScreen">
+    <h2>Enter Our Special Date ❤️</h2>
+    <input type="password" id="dateInput" placeholder="YYYYMMDD">
+    <br>
+    <button onclick="checkDate()">Unlock</button>
 </div>
 
-<!-- موزیک گیتار Another Love -->
-<audio id="bgMusic" autoplay loop>
-    <source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3" type="audio/mpeg">
-</audio>
+<!-- Scene -->
+<div class="screen hidden" id="sceneScreen">
+    <div id="scene">
+        <div id="stars"></div>
+        <img id="earth" src="https://upload.wikimedia.org/wikipedia/commons/9/97/The_Earth_seen_from_Apollo_17.jpg" alt="Earth">
+        <img id="moon" src="https://upload.wikimedia.org/wikipedia/commons/e/e1/FullMoon2010.jpg" alt="Moon">
+        <div id="body">
+            <svg id="heart" viewBox="0 0 32 29.6">
+                <path d="M23.6,0c-2.9,0-5.4,1.7-6.6,4.1C15.8,1.7,13.3,0,10.4,0C4.7,0,0,4.7,0,10.4c0,5.2,4.3,9.4,10.8,14.8
+                c2.4,2,4.9,4,6.4,5.3c1.5-1.3,4-3.3,6.4-5.3C27.7,19.8,32,15.6,32,10.4C32,4.7,27.3,0,23.6,0z"/>
+            </svg>
+        </div>
+        <div id="message">مثل خون در رگ های من ممنون که آمدی و جانی دوباره برایم دادی تا بجنگم با این دنیای بد و نامرد</div>
+    </div>
+    <audio id="bgMusic" autoplay loop>
+        <source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3" type="audio/mpeg">
+    </audio>
+</div>
 
 <script>
-// ایجاد ستاره‌ها
+// Stars
 const starsContainer = document.getElementById("stars");
 for(let i=0;i<50;i++){
     const star = document.createElement('div');
@@ -142,10 +178,18 @@ for(let i=0;i<50;i++){
     starsContainer.appendChild(star);
 }
 
-// متن fade in/out
-window.onload = function(){
-    const msg = document.getElementById("message");
-    setTimeout(()=>{ msg.style.opacity=1; }, 1000);
+// Check password
+const correctDate="14041118";
+function checkDate(){
+    const input = document.getElementById("dateInput").value;
+    if(input===correctDate){
+        document.getElementById("lockScreen").classList.add("hidden");
+        document.getElementById("sceneScreen").classList.remove("hidden");
+        setTimeout(()=>{ document.getElementById("message").style.opacity=1; }, 1000);
+    }else{
+        document.body.style.background="black";
+        alert("Only you know this date...");
+    }
 }
 </script>
 </body>
